@@ -52,20 +52,21 @@ const getPaymentInfo = async (req, res, next) => {
 
 const sendHtmlForm = async (req, res, next) => {
   const { amount, description } = req.body;
+  
+  var html = liqpay.cnb_form({
+    action: 'pay',
+    amount,
+    currency: 'USD',
+    description,
+    order_id: uuidV4(),
+    version: '3',
+    language: 'uk',
+    server_url: 'https://payment-server-node.onrender.com/liqpay-payment-info',
+  });
+
+  res.send(html);
 };
 
-var html = liqpay.cnb_form({
-  action: 'pay',
-  amount,
-  currency: 'USD',
-  description,
-  order_id: uuidV4(),
-  version: '3',
-  language: 'uk',
-  server_url: 'https://payment-server-node.onrender.com/liqpay-payment-info',
-});
-
-res.send(html);
 // router.post('/', async (req, res, next) => {
 //   return await service.makePayment(req.body).then(paymentResult => {
 //     res.status(200).json(paymentResult);
