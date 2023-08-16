@@ -23,12 +23,13 @@ const getPaymentInfo = async (req, res, next) => {
   // };
   // async ({ data, signature }) => {
   const compSignature = liqpay.str_to_sign(private_key + data + private_key);
+  console.log('compSignature ', compSignature);
 
   if (signature === compSignature) {
     const buff = Buffer.from(data, 'base64');
     let text = buff.toString('utf-8');
     text = JSON.parse(text);
-    console.log('text', text);
+    console.log('text ', text);
 
     const { status, amount, order_id, payment_id } = text;
 
@@ -41,6 +42,11 @@ const getPaymentInfo = async (req, res, next) => {
       text: { status, amount, order_id, payment_id },
     });
   }
+
+  res.send({
+    status: 'signature !== compSignature',
+    result: req.body,
+  });
 };
 
 module.exports = {
