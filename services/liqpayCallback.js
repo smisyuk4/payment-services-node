@@ -52,7 +52,8 @@ const getPaymentInfo = async (req, res, next) => {
 
 const sendHtmlForm = async (req, res, next) => {
   const { amount, description } = req.body;
-  
+  console.log(amount, description);
+
   var html = liqpay.cnb_form({
     action: 'pay',
     amount,
