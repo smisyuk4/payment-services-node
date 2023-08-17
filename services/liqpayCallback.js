@@ -57,12 +57,13 @@ const sendHtmlForm = async (req, res, next) => {
   var html = liqpay.cnb_form({
     action: 'pay',
     amount,
-    currency: 'USD',
+    currency: 'UAH',
     description,
     order_id: uuidV4(),
     version: '3',
     language: 'uk',
     server_url: 'https://payment-server-node.onrender.com/liqpay-payment-info',
+    result_url: 'https://smisyuk4.github.io/payment-services',
   });
 
   res.send(html);
