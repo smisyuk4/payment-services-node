@@ -24,20 +24,21 @@
 
 const request = require('request');
 const crypto = require('crypto');
+const { log } = require('console');
 
 /**
  * Creates object with helpers for accessing to Liqpay API
  *
  * @param {string} public_key
  * @param {string} private_key
- * 
+ *
  * @throws {InvalidArgumentException}
  */
 module.exports = function LiqPay(public_key, private_key) {
   /**
    * @member {string} API host
    */
-  this.host = "https://www.liqpay.ua/api/";
+  this.host = 'https://www.liqpay.ua/api/';
 
   /**
    * Call API
@@ -55,13 +56,16 @@ module.exports = function LiqPay(public_key, private_key) {
     const data = Buffer.from(JSON.stringify(params)).toString('base64');
     const signature = this.str_to_sign(private_key + data + private_key);
 
-    request.post(this.host + path, { form: { data: data, signature: signature } }, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        callback(JSON.parse(body))
-      } else {
-        callbackerr(error, response);
+    request.post(
+      this.host + path,
+      { form: { data: data, signature: signature } },
+      function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+          callback(JSON.parse(body));
+        } else {
+          callbackerr(error, response);
+        }
       }
-    }
     );
   };
 
@@ -71,11 +75,12 @@ module.exports = function LiqPay(public_key, private_key) {
    * @param {object} params
    *
    * @return {string}
-   * 
+   *
    * @throws {InvalidArgumentException}
    */
   this.cnb_form = function cnb_form(params) {
-    let language = "ru";
+    console.log(params.currency);
+    let language = 'ru';
 
     if (params.language) {
       language = params.language;
@@ -85,11 +90,19 @@ module.exports = function LiqPay(public_key, private_key) {
     const data = Buffer.from(JSON.stringify(params)).toString('base64');
     const signature = this.str_to_sign(private_key + data + private_key);
 
-    return '<form method="POST" action="https://www.liqpay.ua/api/3/checkout" accept-charset="utf-8">' +
-      '<input type="hidden" name="data" value="' + data + '" />' +
-      '<input type="hidden" name="signature" value="' + signature + '" />' +
-      '<input type="image" src="//static.liqpay.ua/buttons/p1' + language + '.radius.png" name="btn_text" />' +
-      '</form>';
+    return (
+      '<form method="POST" action="https://www.liqpay.ua/api/3/checkout" accept-charset="utf-8">' +
+      '<input type="hidden" name="data" value="' +
+      data +
+      '" />' +
+      '<input type="hidden" name="signature" value="' +
+      signature +
+      '" />' +
+      '<input type="image" src="//static.liqpay.ua/buttons/p1' +
+      language +
+      '.radius.png" name="btn_text" />' +
+      '</form>'
+    );
   };
 
   /**
@@ -98,7 +111,7 @@ module.exports = function LiqPay(public_key, private_key) {
    * @param {object} params
    *
    * @return {string}
-   * 
+   *
    * @throws {InvalidArgumentException}
    */
   this.cnb_signature = function cnb_signature(params) {
@@ -113,7 +126,7 @@ module.exports = function LiqPay(public_key, private_key) {
    * @param {object} params
    *
    * @return {object} params
-   * 
+   *
    * @throws {InvalidArgumentException}
    */
   this.cnb_params = function cnb_params(params) {
@@ -156,7 +169,7 @@ module.exports = function LiqPay(public_key, private_key) {
    * @returns {{ data: string, signature: string }} Form Object
    */
   this.cnb_object = function cnb_object(params) {
-    let language = "ru";
+    let language = 'ru';
 
     if (params.language) {
       language = params.language;
