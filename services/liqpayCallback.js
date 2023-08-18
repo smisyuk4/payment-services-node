@@ -54,7 +54,7 @@ const sendHtmlForm = async (req, res, next) => {
   const { amount, description } = req.body;
   console.log(amount, description);
 
-  var html = liqpay.cnb_form({
+  const html = liqpay.cnb_form({
     action: 'pay',
     amount,
     currency: 'UAH',
@@ -69,13 +69,34 @@ const sendHtmlForm = async (req, res, next) => {
   res.send(html);
 };
 
-// router.post('/', async (req, res, next) => {
-//   return await service.makePayment(req.body).then(paymentResult => {
-//     res.status(200).json(paymentResult);
-//   });
-// });
+const sendParams = async (req, res, next) => {
+  const { amount, description } = req.body;
+  console.log(amount, description);
+
+  const params = {
+    action: 'pay',
+    amount,
+    currency: 'UAH',
+    description,
+    order_id: uuidV4(),
+    version: '3',
+    language: 'uk',
+    server_url: 'https://payment-server-node.onrender.com/liqpay-payment-info',
+    result_url: 'https://smisyuk4.github.io/payment-services',
+  };
+
+  const signature = liqpay.cnb_signature(params);
+
+  const data = Buffer.from(JSON.stringify(params)).toString('base64');
+
+  res.send({
+    status: 'Payment check',
+    paymentValues: { data, signature },
+  });
+};
 
 module.exports = {
   getPaymentInfo,
   sendHtmlForm,
+  sendParams,
 };

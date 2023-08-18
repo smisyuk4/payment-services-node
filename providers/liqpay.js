@@ -24,7 +24,6 @@
 
 const request = require('request');
 const crypto = require('crypto');
-const { log } = require('console');
 
 /**
  * Creates object with helpers for accessing to Liqpay API
