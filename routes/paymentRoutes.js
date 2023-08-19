@@ -2,14 +2,18 @@ const express = require('express');
 const router = express.Router();
 const {
   getPaymentInfo,
-  sendHtmlForm,
-  sendParams,
   sendReports,
+  checkStatus,
+  getLink,
+  sendRegisterOneDay,
 } = require('../services/liqpayServices');
 
-router.post('/getForm', sendHtmlForm);
-router.post('/getParams', sendParams);
-router.get('/getReports', sendReports);
 router.post('/callback', getPaymentInfo);
+
+
+router.get('/getReports', sendReports);
+router.post('/getRegister', sendRegisterOneDay);
+router.post('/getLink', getLink);
+router.post('/checkStatus', checkStatus);
 
 module.exports = { paymentRoutes: router };
