@@ -9,8 +9,6 @@ const {
 } = require('../services/liqpayServices');
 
 router.post('/callback', getPaymentInfo);
-
-
 router.get('/getReports', sendReports);
 router.post('/getRegister', sendRegisterOneDay);
 router.post('/getLink', getLink);
