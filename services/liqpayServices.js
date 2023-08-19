@@ -8,10 +8,9 @@ const liqpay = new LiqPay(public_key, private_key);
 
 const getPaymentInfo = async (req, res, next) => {
   const { data, signature } = req.body;
-  console.log('req.body', req.body);
   console.log('=========> message from bank', `${data}, ===>>>> ${signature}`);
 
-  const compSignature = liqpay.str_to_sign(private_key + data + private_key);
+  const compSignature = liqpay.strToSign(private_key + data + private_key);
   console.log('compSignature ', compSignature);
 
   if (signature === compSignature) {
@@ -22,20 +21,8 @@ const getPaymentInfo = async (req, res, next) => {
 
     const { status, amount, order_id, payment_id } = text;
 
-    return res.send({
-      status: 'Payment check',
-      resultFrom: {
-        data,
-        signature,
-      },
-      text: { status, amount, order_id, payment_id },
-    });
+    return;
   }
-
-  res.send({
-    status: 'signature !== compSignature',
-    result: req.body,
-  });
 };
 
 const sendReports = async (req, res, next) => {
