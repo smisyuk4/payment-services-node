@@ -54,11 +54,16 @@ module.exports = function LiqPay(public_key, private_key) {
     params.public_key = public_key;
     const data = Buffer.from(JSON.stringify(params)).toString('base64');
     const signature = this.str_to_sign(private_key + data + private_key);
+    // console.log(data);
+    // console.log(signature);
 
     request.post(
       this.host + path,
       { form: { data: data, signature: signature } },
       function (error, response, body) {
+        // console.log(error);
+        console.log(response);
+        // console.log(body);
         if (!error && response.statusCode == 200) {
           callback(JSON.parse(body));
         } else {

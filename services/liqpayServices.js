@@ -83,8 +83,33 @@ const sendParams = async (req, res, next) => {
   });
 };
 
+const sendReports = async (req, res, next) => {
+  console.log('sendReports');
+
+  const reports = liqpay.api(
+    'request',
+    {
+      // public_key, // my row
+      action: 'reports',
+      version: '3',
+      date_from: '1660893411',
+      date_to: '1692440211',
+    },
+    function (json) {
+      console.log(json.status);
+    }
+  );
+
+  console.log('reports', reports);
+  res.send({
+    status: 'Reports check',
+    reports,
+  });
+};
+
 module.exports = {
   getPaymentInfo,
   sendHtmlForm,
   sendParams,
+  sendReports,
 };
